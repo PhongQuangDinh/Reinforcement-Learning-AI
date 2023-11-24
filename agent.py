@@ -19,21 +19,9 @@ class Agent:
         self.gamma = 0.9 # discount rate
         self.memory = deque(maxlen=MAX_MEMORY) # popleft()
         self.model = Linear_QNet(11, 256, 3)
-        
-        if os.path.exists("model/model.pth"):
-            # model_save = torch.load('model/model.pth')
-            # self.model.load_state_dict(model_save)
-            print("load model")
-            # self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)
-            
-            self.model = Linear_QNet(11, 256, 3)
-            self.model.load_state_dict(torch.load('model/model.pth'))
-            self.model.eval()
-        
         self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)
         
-        
-
+    
 
     def get_state(self, game):
         head = game.snake[0]
@@ -120,6 +108,9 @@ def train():
     total_score = 0
     record = 0
     agent = Agent()
+    
+    agent.model.load() # load model on existence
+    
     game = SnakeGameAI()
     while True:
         # get old state
@@ -155,8 +146,6 @@ def train():
             mean_score = total_score / agent.n_games
             plot_mean_scores.append(mean_score)
             plot(plot_scores, plot_mean_scores)
-
-import os
 
 if __name__ == '__main__':
     train()

@@ -22,6 +22,12 @@ class Linear_QNet(nn.Module):
 
         file_name = os.path.join(model_folder_path, file_name)
         torch.save(self.state_dict(), file_name)
+        
+    def load(self, file_path='model/model.pth'):
+        if not os.path.exists(file_path):
+            return
+        self.load_state_dict(torch.load(file_path))
+        self.eval()
 
 
 class QTrainer:
@@ -66,6 +72,3 @@ class QTrainer:
         loss.backward()
 
         self.optimizer.step()
-
-
-
